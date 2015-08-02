@@ -3,14 +3,14 @@ class UsersController < ApplicationController
 	skip_before_filter :verify_authenticity_token, :only => [:signup, :signin]
 
   def signin
-
-		@user = User.find(:all, :conditions => { :password=>params[:password] } )
+      
+      @user = User.find_by(email: params[:email])
 		if @user.nil?
 			render json:{
 				result_code: "email invalid"
 			}
 		else
-			if @user.getPassword == params[:password]
+            if @user.password == params[:password]
 				render json:{
 					result_code: "login success"
 				}
@@ -24,9 +24,11 @@ class UsersController < ApplicationController
 
   def signup		
 		@user = User.new
-		@user.setParams(params)
 		
+		@user.setParams(params)
+		puts "aaaaaaaaaaaaaaaaaaaaaaaaaaa"
 		puts(@user.inspect)
+
 		if @user.save
 			render json:{
 				result_code: "sign up success"

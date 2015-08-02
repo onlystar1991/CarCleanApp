@@ -24,9 +24,11 @@ class UsersController < ApplicationController
 
   def signup		
 		@user = User.new
-		@user.setParams(params)
 		
+		@user.setParams(params)
+		puts "aaaaaaaaaaaaaaaaaaaaaaaaaaa"
 		puts(@user.inspect)
+
 		if @user.save
 			render json:{
 				result_code: "sign up success"
