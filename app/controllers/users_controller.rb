@@ -1,43 +1,76 @@
 class UsersController < ApplicationController
 	
-	skip_before_filter :verify_authenticity_token, :only => [:signup, :signin]
+	skip_before_filter :verify_authenticity_token, :only => [:signup, :signin, :signout]
 
-  def signin
-      
-      @user = User.find_by(email: params[:email])
-		if @user.nil?
-			render json:{
-				result_code: "email invalid"
-			}
-		else
+    def signin
+
+        @user = User.find_by(email: params[:email])
+        if @user.nil?
+            render json:{
+                result_code: "email invalid"
+            }
+        else
             if @user.password == params[:password]
-				render json:{
-					result_code: "login success"
-				}
-			else
-				render json:{
-					result_code: "login faild"
-				}
-			end
-		end
-  end
+                if @user.logged_in == 1 
+                    render json:{
+                        result_code: "already logged in"    
+                    }
+                else
+                    @user.update_attribute(:logged_in, 1)
 
-  def signup		
-		@user = User.new
-		
-		@user.setParams(params)
-		puts "aaaaaaaaaaaaaaaaaaaaaaaaaaa"
-		puts(@user.inspect)
+                    render json:{
+                        result_code: "login success"
+                    }
+                end
+            else
+                render json:{
+                    result_code: "password incorrect"
+                }
+            end
+        end
+    end
 
-		if @user.save
-			render json:{
-				result_code: "sign up success"
-			}
-		else
-			render json:{
-				result_code: "sign up faild"
-			}
-		end
-  end
+    
+    def signup		
+        @user = User.new
+
+        @user.setParams(params)
+        
+        puts "---------------------------------"
+        puts @user.inspect
+        if !@user.valid?
+            render json:{
+                result_code: "email format invalid or password length is not enough"
+            }
+        else
+            if @user.save
+                render json:{
+                    result_code: "sign up success"
+                }
+            else
+                render json:{
+                    result_code: " email already exists"
+                }
+            end
+        end
+    end
+    
+    def signout
+        @user = User.find_by(email: params[:email])
+        if @user.nil?
+            render json:{
+                result_code: "email invalid"
+            }
+        else
+            if @user.update_attribute(:logged_in, 0)
+                render json:{
+                    result_code: "successfully logged out"
+                }
+            else
+                render json:{
+                    result_code: "logged out fail"
+                }
+        end
+    end
 
 end
