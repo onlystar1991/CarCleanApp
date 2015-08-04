@@ -11,10 +11,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150803001817) do
+ActiveRecord::Schema.define(version: 20150804015556) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "cars", force: :cascade do |t|
+    t.string   "car_name"
+    t.integer  "user_id"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.string   "car_image_file_name"
+    t.string   "car_image_content_type"
+    t.integer  "car_image_file_size"
+    t.datetime "car_image_updated_at"
+  end
+
+  add_index "cars", ["user_id"], name: "index_cars_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "first_name"
@@ -27,4 +40,5 @@ ActiveRecord::Schema.define(version: 20150803001817) do
     t.integer  "logged_in"
   end
 
+  add_foreign_key "cars", "users"
 end

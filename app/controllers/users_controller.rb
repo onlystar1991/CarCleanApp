@@ -1,7 +1,9 @@
 class UsersController < ApplicationController
 	
-	skip_before_filter :verify_authenticity_token, :only => [:signup, :signin, :signout]
-
+    skip_before_filter :verify_authenticity_token, :only => [:signup, :signin, :signout, :save_img]
+    
+    
+    
     def signin
 
         @user = User.find_by(email: params[:email])
@@ -11,15 +13,20 @@ class UsersController < ApplicationController
             }
         else
             if @user.password == params[:password]
-                if @user.logged_in == 1 
+                if @user.logged_in == 1
+                    
+                    puts ("====================secsecsecsec==============")
+
                     render json:{
                         result_code: "already logged in"    
                     }
                 else
                     @user.update_attribute(:logged_in, 1)
-
+                    
+                    auth_token = AESCrypt.encrypt(@user.id, Rails.application.secrets.secret_key_base)                    
                     render json:{
-                        result_code: "login success"
+                        result_code: "login success",
+                        auth_token: auth_token
                     }
                 end
             else
@@ -30,8 +37,7 @@ class UsersController < ApplicationController
         end
     end
 
-    
-    def signup		
+    def signup
         @user = User.new
 
         @user.setParams(params)
@@ -54,7 +60,7 @@ class UsersController < ApplicationController
             end
         end
     end
-    
+
     def signout
         @user = User.find_by(email: params[:email])
         if @user.nil?
@@ -70,7 +76,13 @@ class UsersController < ApplicationController
                 render json:{
                     result_code: "logged out fail"
                 }
+            end
         end
     end
-
+    
+    private
+    
+    def generate_auth_token
+        self.crypt = ActiveSupport::MessageEncryptor.new(Rails.configuration.secret_key_base)
+    end
 end
