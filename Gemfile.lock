@@ -37,9 +37,11 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     aescrypt (1.0.0)
-    arel (6.0.2)
+    arel (6.0.3)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
+    braintree (2.33.1)
+      builder (>= 2.0.0)
     builder (3.2.2)
     byebug (5.0.0)
       columnize (= 0.9.0)
@@ -58,7 +60,10 @@ GEM
     debug_inspector (0.0.2)
     erubis (2.7.0)
     execjs (2.5.2)
-    globalid (0.3.5)
+    figaro (0.7.0)
+      bundler (~> 1.0)
+      rails (>= 3, < 5)
+    globalid (0.3.6)
       activesupport (>= 4.1.0)
     i18n (0.7.0)
     jbuilder (2.3.1)
@@ -155,8 +160,10 @@ PLATFORMS
 
 DEPENDENCIES
   aescrypt
+  braintree (~> 2.33.1)
   byebug
   coffee-rails (~> 4.1.0)
+  figaro (~> 0.7.0)
   jbuilder (~> 2.0)
   jquery-rails
   paperclip

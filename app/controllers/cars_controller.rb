@@ -8,37 +8,47 @@ class CarsController < ApplicationController
     
     def create
         
-        puts ("-----------------------------")
-        puts params.inspect
-        
         @car = Car.new
-        @car.setData(params)
-        
-        
-        puts ("+++++++++++++++++++++++++++++++++++")
-        puts @car.inspect
-        
-        begin
-            if @car.valid?    
-                if @car.save
-                    render json:{
-                        result_code: "car save success"    
-                    }
+        result = @car.setData(params)
+        if result == 0
+            render json:{
+                status: "fail",
+                messege: "invalid auth_token"
+            }
+        else
+            
+            begin
+                if @car.valid?
+                    if @car.save
+                        render json:{
+                            status: "success",
+                            messege: "success"
+                            car: {
+                                name: @car.name,
+                                image_file: @car.car_image_file_name
+                            }
+                        }
+                    else
+                        render json:{
+                            status: "fail",
+                            messege: "invalid file format or file size too large",
+                            car: {
+                                name: params['car_name']
+                            }
+                        }
+                    end
                 else
                     render json:{
-                        result_code: "invalid file format or file size too large"
+                        status: "fail",
+                        messege: @car.errors.messages,
                     }
                 end
-            else
+            rescue ActiveRecord::CatchAll
                 render json:{
-                        result_code: "invalid file format or file size too large"
+                    status: "fail",
+                    messege: "invalid auth_token"
                 }
             end
-        rescue ActiveRecord::CatchAll
-            render json:{
-                result_code: "invalid auth_token"
-            }
         end
     end
-    
 end
