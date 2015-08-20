@@ -13,9 +13,15 @@ Rails.application.routes.draw do
     
     get 'cars/new'
     
+    get 'promotion_code/new'
+    
+    post 'promotion_code/create'
+    
     get '/client_token' => 'brain#client_token'
     
     post '/payment-method' => 'brain#payment_method'
+    
+    
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
