@@ -22,7 +22,7 @@ class CarsController < ApplicationController
                     if @car.save
                         render json:{
                             status: "success",
-                            messege: "success"
+                            messege: "success",
                             car: {
                                 name: @car.name,
                                 image_file: @car.car_image_file_name
