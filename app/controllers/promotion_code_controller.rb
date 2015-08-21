@@ -11,16 +11,34 @@ class PromotionCodeController < ApplicationController
         @promo_code.email = params[:email]
         @promo_code.code = params[:promo_code]
         
+        
+        
         if @promo_code.valid?
-            @promo_code.save
-            puts ">>>>>>>>>>>>>>>>>>>>>>>>>"
-            puts @promo_code.inspect
             
-            UserMailer.welcome_email(@promo_code).deliver_later
-            render json:{
+            
+            to = params[:email]
+            subject = "Promotion Code"
+            body = params[:promo_code]
+                        
+            begin
+                response = SendgridMailer.email(to, subject, body).deliver
+                
+                puts "----------------------------------"
+                puts response.inspect
+                
+                render json:{
                     status: "success",
                     message: "email sent",
                 }
+            rescue Exception => e
+                render json:{
+                    status: "fail",
+                    message: e.inspect
+                }
+            end
+            
+            
+            
         else
             render json:{
                     status: "promotion_code error",

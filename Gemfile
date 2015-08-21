@@ -8,6 +8,8 @@ gem 'pg'
 
 gem 'aescrypt'
 
+gem 'mailgun-ruby', '~>1.0.3', require: 'mailgun'
+
 gem 'braintree', '~> 2.33.1'
 
 gem 'figaro', '~> 0.7.0'
@@ -16,6 +18,11 @@ gem 'figaro', '~> 0.7.0'
 gem 'paperclip'
 
 # Use SCSS for stylesheets
+
+gem 'actionmailer'
+
+gem 'mail'
+
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'

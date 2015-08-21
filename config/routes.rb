@@ -7,9 +7,9 @@ Rails.application.routes.draw do
 
     post 'cars/create'
     
-    get  'users/new'
+    get 'users/new'
 
-	get  'users/edit'
+	get 'users/edit'
     
     get 'cars/new'
     
@@ -22,7 +22,6 @@ Rails.application.routes.draw do
     post '/payment-method' => 'brain#payment_method'
     
     
-
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
