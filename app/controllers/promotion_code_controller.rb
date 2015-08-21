@@ -11,10 +11,7 @@ class PromotionCodeController < ApplicationController
         @promo_code.email = params[:email]
         @promo_code.code = params[:promo_code]
         
-        
-        
         if @promo_code.valid?
-            
             
             to = params[:email]
             subject = "Promotion Code"
@@ -22,9 +19,6 @@ class PromotionCodeController < ApplicationController
                         
             begin
                 response = SendgridMailer.email(to, subject, body).deliver
-                
-                puts "----------------------------------"
-                puts response.inspect
                 
                 render json:{
                     status: "success",
@@ -36,9 +30,6 @@ class PromotionCodeController < ApplicationController
                     message: e.inspect
                 }
             end
-            
-            
-            
         else
             render json:{
                     status: "promotion_code error",
