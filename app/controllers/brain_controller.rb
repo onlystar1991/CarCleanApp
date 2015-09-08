@@ -1,11 +1,8 @@
 class BrainController < ApplicationController
     
     def client_token
-        
-        puts ">>>>>>>>>>>>>>>>>>>>>>>>>>>"
-        
         render json: {
-            client_token: "dfadfads"
+            client_token: Braintree::ClientToken.generate
         }
     end
     
