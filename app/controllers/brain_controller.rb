@@ -3,8 +3,10 @@ class BrainController < ApplicationController
     def client_token
         
         puts ">>>>>>>>>>>>>>>>>>>>>>>>>>>"
-        render text: {"This is for test"}
         
+        render json: {
+            client_token: "dfadfads"
+        }
     end
     
     def pay
