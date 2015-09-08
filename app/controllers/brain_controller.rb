@@ -3,9 +3,8 @@ class BrainController < ApplicationController
     def client_token
         
         puts ">>>>>>>>>>>>>>>>>>>>>>>>>>>"
-        render json: {
-            client_token: Braintree::ClientToken.generate
-        }
+        render text: {"This is for test"}
+        
     end
     
     def pay
