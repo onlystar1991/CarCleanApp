@@ -1,9 +1,16 @@
 class BrainController < ApplicationController
     
     def client_token
-        render json: {
-            client_token: Braintree::ClientToken.generate
-        }
+        begin
+            render json: {
+                client_token: Braintree::ClientToken.generate
+            }
+        rescue
+            render json: {
+                client_token: "Authentication Fail"
+            }
+        end
+        
     end
     
     def pay
