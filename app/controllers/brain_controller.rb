@@ -1,6 +1,10 @@
 class BrainController < ApplicationController
     
     def client_token
+        
+        puts "=============="
+        puts Braintree.inspect
+        
         begin
             render json: {
                 client_token: Braintree::ClientToken.generate
@@ -24,7 +28,7 @@ class BrainController < ApplicationController
             if result.success?
                 render json: {
                     result_code: "pay successed"
-                    }
+                }
             else
                 render json: {
                     result_code: "pay faild"
