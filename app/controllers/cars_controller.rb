@@ -18,7 +18,6 @@ class CarsController < ApplicationController
                         status: "success",
                         messege: "success",
                         car: {
-                        
                         }
                     }
                 else
