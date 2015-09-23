@@ -2,9 +2,6 @@ class BrainController < ApplicationController
     
     def client_token
         
-        puts "=============="
-        puts Braintree.inspect
-        
         begin
             render json: {
                 client_token: Braintree::ClientToken.generate
@@ -36,6 +33,5 @@ class BrainController < ApplicationController
             end
         end
     end
-    
     
 end

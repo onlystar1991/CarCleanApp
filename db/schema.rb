@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150820221739) do
+ActiveRecord::Schema.define(version: 20150923115907) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,6 +25,8 @@ ActiveRecord::Schema.define(version: 20150820221739) do
     t.string   "car_image_content_type"
     t.integer  "car_image_file_size"
     t.datetime "car_image_updated_at"
+    t.string   "type"
+    t.string   "plate"
   end
 
   add_index "cars", ["user_id"], name: "index_cars_on_user_id", using: :btree
@@ -42,9 +44,12 @@ ActiveRecord::Schema.define(version: 20150820221739) do
     t.string   "email"
     t.string   "password"
     t.string   "phonenumber"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
     t.integer  "logged_in"
+    t.string   "loc_latitude"
+    t.string   "loc_longitude"
+    t.boolean  "isWasher"
   end
 
   add_foreign_key "cars", "users"

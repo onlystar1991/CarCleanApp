@@ -1,16 +1,21 @@
 Rails.application.routes.draw do
+
     post 'users/signin'
 
     post 'users/signup'
     
     post 'users/signout'
 
+    post 'users/updateLocation'
+
     post 'cars/create'
     
     get 'users/new'
 
-	get 'users/edit'
+    get 'users/edit'
     
+    get 'users/loc'
+
     get 'cars/new'
     
     get 'promotion_code/new'
@@ -20,6 +25,10 @@ Rails.application.routes.draw do
     get '/client_token' => 'brain#client_token'
     
     post '/payment-method' => 'brain#payment_method'
+
+    post 'users/findWasher'
+
+    post 'users/getMyCar'
     
     
   # The priority is based upon order of creation: first created -> highest priority.

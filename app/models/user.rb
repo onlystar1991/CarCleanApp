@@ -7,6 +7,7 @@ class User < ActiveRecord::Base
     validates :phonenumber , :presence => true
     validates :password, :presence => true, :length => { :in => 5..20 }
     validates :email, :presence => true, :uniqueness => true, format: { with: VALID_EMAIL_REGEX }
+    validates :isWasher , :presence => true
 	
 	def setParams(params)
 		self.password = params[:password]
@@ -14,5 +15,6 @@ class User < ActiveRecord::Base
 		self.last_name = params[:last_name]
 		self.phonenumber = params[:phone_number]
 		self.email = params[:email]
+		self.isWasher = (params[:isWasher] == 'YES') ? true : false
 	end
 end

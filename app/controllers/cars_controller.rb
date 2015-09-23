@@ -2,10 +2,6 @@ class CarsController < ApplicationController
     
     skip_before_filter :verify_authenticity_token, :only => [:create, :new]
     
-    def new
-        
-    end
-    
     def create
         
         @car = Car.new
@@ -16,38 +12,43 @@ class CarsController < ApplicationController
                 messege: "invalid auth_token"
             }
         else
-            
-            begin
-                if @car.valid?
-                    if @car.save
+            if result == 1
+                if @car.save
+                    render json:{
+                        status: "success",
+                        messege: "success",
+                        car: {
+                        
+                        }
+                    }
+                else
+                    
+                end
+            else
+                begin
+                    if @car.valid?
                         render json:{
                             status: "success",
                             messege: "success",
                             car: {
-                                name: @car.name,
+                                name: @car.car_name,
+                                type: @car.type,
+                                plate: @car.plate,
                                 image_file: @car.car_image_file_name
                             }
                         }
                     else
                         render json:{
                             status: "fail",
-                            messege: "invalid file format or file size too large",
-                            car: {
-                                name: params['car_name']
-                            }
+                            messege: @car.errors.messages,
                         }
                     end
-                else
+                rescue Exception => e
                     render json:{
                         status: "fail",
-                        messege: @car.errors.messages,
+                        messege: "database disconnected"
                     }
                 end
-            rescue ActiveRecord::CatchAll
-                render json:{
-                    status: "fail",
-                    messege: "invalid auth_token"
-                }
             end
         end
     end

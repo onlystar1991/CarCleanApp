@@ -17,12 +17,14 @@ class Car < ActiveRecord::Base
             self.user_id = crypt.decrypt_and_verify(data['auth_token'])
             
             self.car_name = data['car_name']
-                
+            self.plate = data['plate']
+            self.type = data['type']
+
             r = Random.new
 
             rand_initial = r.rand(100000000...300000000)
 
-            self.car_image_file_name =  "#{rand_initial}" << data['car_image'].original_filename
+            self.car_image_file_name =  "#{rand_initial}-" << data['car_image'].original_filename
 
             directory = "public/data"
             # create the file path
@@ -34,13 +36,15 @@ class Car < ActiveRecord::Base
 
             self.car_image_file_size = File.size(data['car_image'].tempfile)
 
+
             self.car_image_content_type = data['car_image'].content_type
+
+        rescue NoMethodError => e
+
+            return 1;
+        rescue Exception => e
             
-        rescue Exception
             return 0;
         end
-        
-        
-        
     end
 end

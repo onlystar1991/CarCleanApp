@@ -1,8 +1,14 @@
 class UsersController < ApplicationController
 	
-    skip_before_filter :verify_authenticity_token, :only => [:signup, :signin, :signout, :save_img]
-    
-    
+    skip_before_filter :verify_authenticity_token, :only => [
+                                                            :signup, 
+                                                            :signin, 
+                                                            :signout, 
+                                                            :save_img, 
+                                                            :updateLocation, 
+                                                            :findWasher,
+                                                            :getMyCar
+                                                        ]
     
     def signin
         @user = User.find_by(email: params[:email])
@@ -15,10 +21,11 @@ class UsersController < ApplicationController
                 }
             }
         else
+
+            @user.update_attribute(:logged_in, 0)
+
             if @user.password == params[:password]
                 if @user.logged_in == 1
-                    
-                    puts ("====================secsecsecsec==============")
 
                     render json:{
                         status: "fail",
@@ -30,11 +37,10 @@ class UsersController < ApplicationController
                 else
                     @user.update_attribute(:logged_in, 1)
                     
-                    crypt = ActiveSupport::MessageEncryptor.new(Rails.application.secrets.secret_key_base)
+                    crypt = generate_auth_token
+
                     auth_token = crypt.encrypt_and_sign(@user.id)
                     
-                    
-                    #auth_token = AESCrypt.encrypt(@user.id, Rails.application.secrets.secret_key_base)                    
                     render json:{
                         status: "success",
                         message: "success",
@@ -137,9 +143,57 @@ class UsersController < ApplicationController
         end
     end
     
+    
+    def updateLocation
+        crypt = generate_auth_token
+        
+        user_id = crypt.decrypt_and_verify(params[:auth_token])
+        
+        @user = User.find_by(id: user_id)
+        @user.update_attribute(:loc_latitude, params[:latitude])
+        @user.update_attribute(:loc_longitude, params[:longitude])
+        
+        render json: {
+            auth_token: params[:auth_token],
+            status: "success",
+            user: {
+                email: "",
+                phonenumber: "",
+                loc_latitude: "",
+                loc_longitude: ""
+            }
+        }
+    end
+
+    def findWasher
+        @washers = User.find(isWasher: true)
+        render json: {
+            washers: @washers
+        }
+    end
+
+    def getMyCar
+        crypt = generate_auth_token
+        begin
+            user_id = crypt.decrypt_and_verify(params[:auth_token])
+            @user = User.find_by(id: user_id)
+            render json: {
+                auth_token: params[:auth_token],
+                message: "success",
+                cars: @user.cars
+            }
+
+        rescue Exception => e
+            render json: {
+                auth_token: params[:auth_token],
+                message: "invalid token"
+            }
+        end
+    end
+
     private
     
     def generate_auth_token
-        self.crypt = ActiveSupport::MessageEncryptor.new(Rails.configuration.secret_key_base)
+        crypt = ActiveSupport::MessageEncryptor.new(Rails.application.secrets.secret_key_base)
     end
 end
