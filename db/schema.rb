@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150923115907) do
+ActiveRecord::Schema.define(version: 20150924215759) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,12 +44,22 @@ ActiveRecord::Schema.define(version: 20150923115907) do
     t.string   "email"
     t.string   "password"
     t.string   "phonenumber"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
     t.integer  "logged_in"
     t.string   "loc_latitude"
     t.string   "loc_longitude"
     t.boolean  "isWasher"
+    t.string   "credit_id"
+    t.string   "credit_exp_month"
+    t.string   "credit_exp_year"
+    t.string   "paypal_email"
+    t.string   "apple_pay_merchant_identify"
+    t.string   "apple_pay_support_network"
+    t.string   "apple_pay_merchant_capabilities"
+    t.string   "apple_pay_country_code"
+    t.string   "apple_pay_currency_code"
+    t.string   "apple_pay_summary_items"
   end
 
   add_foreign_key "cars", "users"

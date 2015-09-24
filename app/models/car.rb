@@ -12,9 +12,7 @@ class Car < ActiveRecord::Base
     def setData(data)
         
         begin
-            
-            crypt = ActiveSupport::MessageEncryptor.new(Rails.application.secrets.secret_key_base)
-            self.user_id = crypt.decrypt_and_verify(data['auth_token'])
+            self.user_id = data['user_id']
             
             self.car_name = data['car_name']
             self.plate = data['plate']

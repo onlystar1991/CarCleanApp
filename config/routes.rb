@@ -28,6 +28,8 @@ Rails.application.routes.draw do
 
     post 'users/findWasher'
 
+    get 'users/findWasher'
+
     post 'users/getMyCar'
     
     

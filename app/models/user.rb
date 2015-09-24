@@ -8,6 +8,7 @@ class User < ActiveRecord::Base
     validates :password, :presence => true, :length => { :in => 5..20 }
     validates :email, :presence => true, :uniqueness => true, format: { with: VALID_EMAIL_REGEX }
     validates :isWasher , :presence => true
+    validates :paypal_email, format: { with: VALID_EMAIL_REGEX }
 	
 	def setParams(params)
 		self.password = params[:password]
