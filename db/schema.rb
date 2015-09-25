@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150924215759) do
+ActiveRecord::Schema.define(version: 20150925124659) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,6 +60,10 @@ ActiveRecord::Schema.define(version: 20150924215759) do
     t.string   "apple_pay_country_code"
     t.string   "apple_pay_currency_code"
     t.string   "apple_pay_summary_items"
+    t.string   "user_avatar_file_name"
+    t.string   "user_avatar_content_type"
+    t.integer  "user_avatar_file_size"
+    t.datetime "user_avatar_updated_at"
   end
 
   add_foreign_key "cars", "users"

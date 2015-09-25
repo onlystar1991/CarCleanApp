@@ -9,7 +9,8 @@ class UsersController < ApplicationController
                                                             :findWasher,
                                                             :getMyCar,
                                                             :findUser,
-                                                            :updatePaymentInfo
+                                                            :updatePaymentInfo,
+                                                            :updateProfile
                                                         ]
     
     def signin
@@ -104,7 +105,8 @@ class UsersController < ApplicationController
                         first_name: @user.first_name,
                         last_name: @user.last_name,
                         phonenumber: @user.phonenumber,
-                        email: @user.email
+                        email: @user.email,
+                        file_name: @user.user_avatar_file_name
                     }
                 }
             else
@@ -151,6 +153,33 @@ class UsersController < ApplicationController
         end
     end
     
+    def updateProfile
+        
+        @user = User.find_by(id: params[:user_id])
+        @user.updateData(params)
+
+        if !@user.valid?
+            
+            render json:{
+                status: "fail",
+                message: "invalid user",
+                error: @user.errors.messages
+            }
+        else
+            render json:{
+                message: "update success",
+                status: "success",
+                user: {
+                    first_name: @user.first_name,
+                    last_name: @user.last_name,
+                    phonenumber: @user.phonenumber,
+                    email: @user.email,
+                    file_name: @user.user_avatar_file_name,
+                    user_id: @user.id
+                }
+            }
+        end
+    end
     
     def updateLocation
         

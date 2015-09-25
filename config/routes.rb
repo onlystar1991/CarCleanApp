@@ -37,6 +37,8 @@ Rails.application.routes.draw do
     post 'users/updatePaymentInfo'
 
     post 'cars/updateCarInfo'
+
+    post 'users/updateProfile'
     
     
   # The priority is based upon order of creation: first created -> highest priority.
