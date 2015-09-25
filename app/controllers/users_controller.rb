@@ -7,7 +7,9 @@ class UsersController < ApplicationController
                                                             :save_img, 
                                                             :updateLocation, 
                                                             :findWasher,
-                                                            :getMyCar
+                                                            :getMyCar,
+                                                            :findUser,
+                                                            :updatePaymentInfo
                                                         ]
     
     def signin
@@ -62,7 +64,6 @@ class UsersController < ApplicationController
                             apple_pay_country_code: @user.apple_pay_country_code,
                             apple_pay_currency_code: @user.apple_pay_currency_code,
                             apple_pay_summary_items: @user.apple_pay_summary_items,
-                            cars: @user.cars
                         }
                     }
                 end
@@ -153,7 +154,7 @@ class UsersController < ApplicationController
     
     def updateLocation
         
-        user_id = params[:id]
+        user_id = params[:user_id]
         
         @user = User.find_by(id: user_id)
         @user.update_attribute(:loc_latitude, params[:latitude])
@@ -191,13 +192,29 @@ class UsersController < ApplicationController
     end
 
     def getMyCar
+
         user_id = params[:user_id]
         @user = User.find_by(id: user_id)
+        
+        result_cars = Array.new
+        
+        @user.cars.each do |car|
+            temp = Hash.new
+            temp["car_id"] = car.id
+            temp["car_name"] = car.car_name
+            temp["type"] = car.type
+            temp["plate"] = car.plate
+            temp["file_name"] = car.car_image_file_name
+
+            result_cars << temp
+        end
+
         if !@user.nil?
             render json: {
                 id: params[:user_id],
+                email: @user.email,
                 message: "success",
-                cars: @user.cars
+                cars: result_cars
             }
         else
             render json: {
@@ -213,20 +230,21 @@ class UsersController < ApplicationController
         @user = User.find_by(id: user_id)
         if !@user.nil?
             render json: {
+                status: "success",
                 message: "success",
                 user: {
                     first_name: @user.first_name,
                     last_name: @user.last_name,
                     phonenumber: @user.phonenumber,
                     email: @user.email,
-                    id: @user.id,
-                    cars: @user.cars
+                    id: @user.id
                 }
             }
         else
             render json: {
+                status: "fail",
                 id: params[:user_id],
-                message: "invalid user",
+                message: "invalid user"
             }
         end        
     end
@@ -240,32 +258,83 @@ class UsersController < ApplicationController
         begin
             case paymentType
             when "CreditCard"
-                @user.update_attribute(:credit_id, params[:credit_id])
-                @user.update_attribute(:credit_exp_month, params[:credit_exp_month])
-                @user.update_attribute(:credit_exp_year, params[:credit_exp_year])
+
+                if params[:credit_id].nil? || params[:credit_exp_month] || params[:credit_exp_year]
+                    render json: {
+                        status: "fail",
+                        message: "parameter not set"
+                    }
+                else
+                    @user.update_attribute(:credit_id, params[:credit_id])
+                    @user.update_attribute(:credit_exp_month, params[:credit_exp_month])
+                    @user.update_attribute(:credit_exp_year, params[:credit_exp_year])
+                    
+                    render json: {
+                        status: "success",
+                        message: " "
+                    }
+                end
             when "Paypal"
-                @user.update_attribute(:paypal_email, params[:paypal_email])
+                if params[:paypal_email].nil?
+                    render json: {
+                        status: "fail",
+                        message: "parameter not set"
+                    }
+                else
+                    @user.update_attribute(:paypal_email, params[:paypal_email])
+                    render json: {
+                        status: "success",
+                        message: " "
+                    }
+                end
             when "ApplePay"
-                @user.update_attribute(:apple_pay_merchant_identify, params[:apple_pay_merchant_identify])
-                @user.update_attribute(:apple_pay_support_network, params[:apple_pay_support_network])
-                @user.update_attribute(:apple_pay_merchant_capabilities, params[:apple_pay_merchant_capabilities])
-                @user.update_attribute(:apple_pay_country_code, params[:apple_pay_country_code])
-                @user.update_attribute(:apple_pay_currency_code, params[:apple_pay_currency_code])
-                @user.update_attribute(:apple_pay_summary_items, params[:apple_pay_summary_items])
+
+                if params[:apple_pay_merchant_identify].nil? || params[:apple_pay_support_network].nil? || params[:apple_pay_merchant_capabilities].nil? || params[:apple_pay_country_code].nil? || params[:apple_pay_currency_code].nil? || params[:apple_pay_summary_items].nil?
+                    render json: {
+                        status: "fail",
+                        message: "parameter not set"
+                    }
+                else
+                    @user.update_attribute(:apple_pay_merchant_identify, params[:apple_pay_merchant_identify])
+                    @user.update_attribute(:apple_pay_support_network, params[:apple_pay_support_network])
+                    @user.update_attribute(:apple_pay_merchant_capabilities, params[:apple_pay_merchant_capabilities])
+                    @user.update_attribute(:apple_pay_country_code, params[:apple_pay_country_code])
+                    @user.update_attribute(:apple_pay_currency_code, params[:apple_pay_currency_code])
+                    @user.update_attribute(:apple_pay_summary_items, params[:apple_pay_summary_items])
+                    render json: {
+                        status: "success",
+                        message: " ",
+                        user: {
+                            first_name: @user.first_name,
+                            last_name: @user.last_name,
+                            phonenumber: @user.phonenumber,
+                            email: @user.email,
+                            id: @user.id,
+                            credit_id: @user.credit_id,
+                            credit_card_exp_month: @user.credit_exp_month,
+                            credit_card_exp_year: @user.credit_exp_year,
+                            paypal_email: @user.paypal_email,
+                            apple_pay_merchant_identify: @user.apple_pay_merchant_identify,
+                            apple_pay_support_network: @user.apple_pay_support_network,
+                            apple_pay_merchant_capabilities: @user.apple_pay_merchant_capabilities,
+                            apple_pay_country_code: @user.apple_pay_country_code,
+                            apple_pay_currency_code: @user.apple_pay_currency_code,
+                            apple_pay_summary_items: @user.apple_pay_summary_items,
+                        }
+                    }
+                end
+            else
+                render json: {
+                    status: "fail",
+                    message: "parameter not set"
+                }
             end
-            render json: {
-                status: "success"
-            }
         rescue Exception => e
             render json: {
-                status: "fail"
+                status: "fail",
+                message: "parameter not set"
             }
         end
     end
 
-    private
-    
-    def generate_auth_token
-        crypt = ActiveSupport::MessageEncryptor.new(Rails.application.secrets.secret_key_base)
-    end
 end

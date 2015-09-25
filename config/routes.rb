@@ -31,6 +31,12 @@ Rails.application.routes.draw do
     get 'users/findWasher'
 
     post 'users/getMyCar'
+
+    post 'users/findUser'
+
+    post 'users/updatePaymentInfo'
+
+    post 'cars/updateCarInfo'
     
     
   # The priority is based upon order of creation: first created -> highest priority.
