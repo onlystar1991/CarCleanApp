@@ -20,25 +20,19 @@ class UsersController < ApplicationController
         if @user.nil?
             render json:{
                 status: "fail",
-                message: "email doesnot exist",
+                message: "Invaild Email!",
                 user: {
                     email: params[:email]
                 }
             }
         else
             
-            # This should be deleted
-
-            @user.update_attribute(:logged_in, 0)
-            
-            # This should be deleted
-            
             if @user.password == params[:password]
                 if @user.logged_in == 1
 
                     render json:{
                         status: "fail",
-                        message: "already logged in",
+                        message: "You have already logged in.",
                         user: {
                             email: params[:email]
                         }
@@ -71,7 +65,7 @@ class UsersController < ApplicationController
             else
                 render json:{
                     status: "fail",
-                    message: "password incorrect",
+                    message: "Pawword is Incorrect.",
                     user: {
                         email: params[:email]
                     }
@@ -85,10 +79,35 @@ class UsersController < ApplicationController
         @user.setParams(params)
         
         if !@user.valid?
-            
+
+
+            if !@user.errors.messages[:email].nil?
+                error = "Email " << @user.errors.messages[:email][0].to_s
+            else
+                if !@user.errors.messages[:password].nil?
+                    error = "Password " << @user.errors.messages[:password][0].to_s
+                else
+                    if !@user.errors.messages[:phonenumber].nil?
+                        error = "Phone Number " << @user.errors.messages[:phonenumber][0].to_s
+                    else
+                        if !@user.errors.messages[:last_name].nil?
+                            error = "Last name" << @user.errors.messages[:last_name][0].to_s
+                        else
+                            if !@user.errors.messages[:first_name].nil?
+                                error = "First name" << @user.errors.messages[:first_name][0].to_s
+                            else
+                                if !@user.errors.messages[:isWasher][0].nil?
+                                    error = "Are you washer or driver?"
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+
             render json:{
                 status: "fail",
-                message: @user.errors.messages,
+                message: error,
                 user: {
                     first_name: params[:first_name],
                     last_name: params[:last_name],
@@ -129,7 +148,7 @@ class UsersController < ApplicationController
         if @user.nil?
             render json:{
                 status: "fail",
-                message: "invalid user"
+                message: "Invaild User"
             }
         else
             if @user.update_attribute(:logged_in, 0)
@@ -160,10 +179,34 @@ class UsersController < ApplicationController
 
         if !@user.valid?
             
+            if !@user.errors.messages[:email].nil?
+                error = "Email " << @user.errors.messages[:email][0].to_s
+            else
+                if !@user.errors.messages[:password].nil?
+                    error = "Password " << @user.errors.messages[:password][0].to_s
+                else
+                    if !@user.errors.messages[:phonenumber].nil?
+                        error = "Phone Number " << @user.errors.messages[:phonenumber][0].to_s
+                    else
+                        if !@user.errors.messages[:last_name].nil?
+                            error = "Last name" << @user.errors.messages[:last_name][0].to_s
+                        else
+                            if !@user.errors.messages[:first_name].nil?
+                                error = "First name" << @user.errors.messages[:first_name][0].to_s
+                            else
+                                if !@user.errors.messages[:isWasher][0].nil?
+                                    error = "Are you washer or driver?"
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+
             render json:{
                 status: "fail",
                 message: "invalid user",
-                error: @user.errors.messages
+                error: error
             }
         else
             render json:{

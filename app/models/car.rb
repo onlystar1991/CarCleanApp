@@ -17,7 +17,6 @@ class Car < ActiveRecord::Base
             self.car_name = data['car_name']
             self.plate = data['plate']
             self.type = data['type']
-
             r = Random.new
 
             rand_initial = r.rand(100000000...300000000)
