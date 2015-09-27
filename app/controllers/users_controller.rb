@@ -78,8 +78,12 @@ class UsersController < ApplicationController
         @user = User.new
         @user.setParams(params)
         
-        if !@user.valid?
+        puts "==========================="
+        puts @user.inspect
+        puts @user.valid?
+        puts @user.errors.messages.inspect
 
+        if !@user.valid?
 
             if !@user.errors.messages[:email].nil?
                 error = "Email " << @user.errors.messages[:email][0].to_s

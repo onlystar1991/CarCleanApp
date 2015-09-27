@@ -48,8 +48,6 @@ class CarsController < ApplicationController
                                 }
                             }
                         else
-                            
-                            
                             render json:{
                                 status: "fail",
                                 messege: "Car image file type is not valid or file size is too large.",
