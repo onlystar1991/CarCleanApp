@@ -251,7 +251,7 @@ class UsersController < ApplicationController
 
     def findWasher
         @washers = User.find(isWasher: true)
-        
+
         results = Array.new
         @washers.each do |washer|
             temp = Hash.new
@@ -391,6 +391,7 @@ class UsersController < ApplicationController
                             credit_id: @user.credit_id,
                             credit_card_exp_month: @user.credit_exp_month,
                             credit_card_exp_year: @user.credit_exp_year,
+                            credit_cvc: @user.credit_cvc,
                             paypal_email: @user.paypal_email,
                             apple_pay_merchant_identify: @user.apple_pay_merchant_identify,
                             apple_pay_support_network: @user.apple_pay_support_network,
@@ -404,7 +405,7 @@ class UsersController < ApplicationController
             else
                 render json: {
                     status: "fail",
-                    message: "parameter not set"
+                    message: "Payment Information Not Correct"
                 }
             end
         rescue Exception => e
