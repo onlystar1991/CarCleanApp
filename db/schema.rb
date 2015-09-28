@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150925124659) do
+ActiveRecord::Schema.define(version: 20150928021122) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,6 +64,7 @@ ActiveRecord::Schema.define(version: 20150925124659) do
     t.string   "user_avatar_content_type"
     t.integer  "user_avatar_file_size"
     t.datetime "user_avatar_updated_at"
+    t.string   "credit_cvc"
   end
 
   add_foreign_key "cars", "users"

@@ -52,6 +52,7 @@ class UsersController < ApplicationController
                             credit_id: @user.credit_id,
                             credit_card_exp_month: @user.credit_exp_month,
                             credit_card_exp_year: @user.credit_exp_year,
+                            credit_cvc: @user.credit_cvc,
                             paypal_email: @user.paypal_email,
                             apple_pay_merchant_identify: @user.apple_pay_merchant_identify,
                             apple_pay_support_network: @user.apple_pay_support_network,
@@ -250,7 +251,7 @@ class UsersController < ApplicationController
 
     def findWasher
         @washers = User.find(isWasher: true)
-        #@washers = User.all
+        
         results = Array.new
         @washers.each do |washer|
             temp = Hash.new
@@ -335,15 +336,16 @@ class UsersController < ApplicationController
             case paymentType
             when "CreditCard"
 
-                if params[:credit_id].nil? || params[:credit_exp_month] || params[:credit_exp_year]
+                if params[:credit_id].nil? || params[:credit_exp_month] || params[:credit_exp_year] || params[:credit_cvc]
                     render json: {
                         status: "fail",
-                        message: "parameter not set"
+                        message: "Payment Information Not Correct"
                     }
                 else
                     @user.update_attribute(:credit_id, params[:credit_id])
                     @user.update_attribute(:credit_exp_month, params[:credit_exp_month])
                     @user.update_attribute(:credit_exp_year, params[:credit_exp_year])
+                    @user.update_attribute(:credit_cvc, params[:credit_cvc])
                     
                     render json: {
                         status: "success",
@@ -354,7 +356,7 @@ class UsersController < ApplicationController
                 if params[:paypal_email].nil?
                     render json: {
                         status: "fail",
-                        message: "parameter not set"
+                        message: "Payment Information Not Correct"
                     }
                 else
                     @user.update_attribute(:paypal_email, params[:paypal_email])
@@ -368,7 +370,7 @@ class UsersController < ApplicationController
                 if params[:apple_pay_merchant_identify].nil? || params[:apple_pay_support_network].nil? || params[:apple_pay_merchant_capabilities].nil? || params[:apple_pay_country_code].nil? || params[:apple_pay_currency_code].nil? || params[:apple_pay_summary_items].nil?
                     render json: {
                         status: "fail",
-                        message: "parameter not set"
+                        message: "Payment Information Not Correct"
                     }
                 else
                     @user.update_attribute(:apple_pay_merchant_identify, params[:apple_pay_merchant_identify])
@@ -408,7 +410,7 @@ class UsersController < ApplicationController
         rescue Exception => e
             render json: {
                 status: "fail",
-                message: "parameter not set"
+                message: "Payment Information Not Correct"
             }
         end
     end
