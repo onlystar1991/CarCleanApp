@@ -60,6 +60,7 @@ class UsersController < ApplicationController
                             apple_pay_country_code: @user.apple_pay_country_code,
                             apple_pay_currency_code: @user.apple_pay_currency_code,
                             apple_pay_summary_items: @user.apple_pay_summary_items,
+                            isWasher: @user.isWasher
                         }
                     }
                 end

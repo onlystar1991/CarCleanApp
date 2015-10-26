@@ -10,13 +10,13 @@ class PromotionCodeController < ApplicationController
         
         @promo_code.email = params[:email]
         @promo_code.code = params[:promo_code]
+
         
         if @promo_code.valid?
             
             to = params[:email]
             subject = "Promotion Code"
             body = params[:promo_code]
-                        
             begin
                 response = SendgridMailer.email(to, subject, body).deliver
                 
