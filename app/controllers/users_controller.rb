@@ -28,18 +28,7 @@ class UsersController < ApplicationController
         else
             
             if @user.password == params[:password]
-                if @user.logged_in == 1
-
-                    render json:{
-                        status: "fail",
-                        message: "You have already logged in.",
-                        user: {
-                            email: params[:email]
-                        }
-                    }
-                else
-                    @user.update_attribute(:logged_in, 1)
-                    
+                                    
                     render json:{
                         status: "success",
                         message: "success",
@@ -63,7 +52,6 @@ class UsersController < ApplicationController
                             isWasher: @user.isWasher
                         }
                     }
-                end
             else
                 render json:{
                     status: "fail",
