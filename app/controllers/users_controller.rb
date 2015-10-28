@@ -239,7 +239,8 @@ class UsersController < ApplicationController
     end
 
     def findWasher
-        @washers = User.find(isWasher: true)
+        # @user = User.find_by(email: params[:email])
+        @washers = User.all
 
         results = Array.new
         @washers.each do |washer|
@@ -249,7 +250,10 @@ class UsersController < ApplicationController
             temp["phonenumber"] = washer.phonenumber
             temp["loc_longitude"] = washer.loc_longitude
             temp["loc_latitude"] = washer.loc_latitude
-            results << temp
+            
+            if temp['isWasher']
+               results << temp 
+            end
         end
 
         render json: {
